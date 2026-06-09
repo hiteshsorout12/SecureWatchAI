@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SecureWatch | Intrusion History</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="history.css">
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <div class="logo">
+                    <span class="logo-icon">🛡️</span>
+                    <span class="logo-text">SecureWatch</span>
+                </div>
+                <div class="header-title">
+                    <h1>Intrusion History</h1>
+                    <p class="subtitle">Monitor detected security events</p>
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="stat-badge">
+                    <span class="stat-number" id="total-events">-</span>
+                    <span class="stat-label">Total Events</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Search & Filter -->
+        <div class="controls">
+            <div class="search-box">
+                <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8" />
+                    <path d="m21 21-4.35-4.35" />
+                </svg>
+                <input type="text" id="search-input" placeholder="Search by Event ID...">
+            </div>
+            <select id="filter-type" class="filter-select">
+                <option value="all">All Media</option>
+                <option value="photo">Photo Only</option>
+                <option value="video">Video Only</option>
+            </select>
+        </div>
+
+        <!-- History Grid -->
+        <main class="history-grid" id="history-container"></main>
+
+        <!-- States -->
+        <div class="state-message loading-state" id="loading">
+            <div class="spinner"></div>
+            <p>Loading security events...</p>
+        </div>
+
+        <div class="state-message empty-state" id="empty-state">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M9 12h6m-3-3v6m-7 4h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+            </svg>
+            <h3>No Events Found</h3>
+            <p>No intrusion events recorded yet.</p>
+        </div>
+
+        <div class="state-message error-state" id="error-state">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path
+                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+            <h3>Connection Error</h3>
+            <p>Unable to load events.</p>
+            <button class="retry-btn" onclick="loadHistory()">Retry</button>
+        </div>
+    </div>
+
+    <script src="history.js"></script>
+</body>
+
+</html>

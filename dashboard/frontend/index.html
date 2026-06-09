@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>🛡️ SecureWatch AI Dashboard</title>
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0ea5e9">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link rel="icon" href="/favicon.ico">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <h1>🛡️ SecureWatch AI Dashboard</h1>
+
+    <div class="dashboard">
+
+        <!-- Device Status Card -->
+        <div class="card">
+
+            <h2>💻 Device Status</h2>
+
+            <div id="status">
+                <div style="
+                    text-align:center;
+                    padding:20px;
+                    color:#94a3b8;
+                ">
+                    Loading...
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Security Analytics Card -->
+        <div class="card">
+
+            <h2>📊 Security Analytics</h2>
+
+            <div id="analytics">
+                <div style="
+                    text-align:center;
+                    padding:20px;
+                    color:#94a3b8;
+                ">
+                    Loading...
+                </div>
+            </div>
+
+            <div id="risk-analytics">
+                <div style="
+                    text-align:center;
+                    padding:20px;
+                    color:#94a3b8;
+                ">
+                    Loading risk analytics...
+                </div>
+            </div>
+
+        </div>
+
+        <div class="card">
+
+            <h2>📸 Latest Evidence</h2>
+
+            <div id="evidence"></div>
+
+            <div style="
+        margin-top:20px;
+        text-align:center;
+    ">
+
+                <button class="capture-btn" onclick="window.location.href='/evidence'">
+                    📂 Open Evidence Center
+                </button>
+
+                <br><br>
+
+                <button class="capture-btn" onclick="window.location.href='/history'">
+                    📜 Intrusion History
+                </button>
+
+                <br><br>
+
+                <button class="alarm-btn" onclick="window.location.href='/location'">
+                    📍 Live Tracking
+                </button>
+
+            </div>
+
+        </div>
+
+        <!-- Recent Alerts Card -->
+        <div class="card">
+
+            <h2>🔔 Recent Alerts</h2>
+
+            <div id="alerts" class="scroll-card"></div>
+
+        </div>
+
+        <div class="card full-width">
+
+            <h2>🕒 Intrusion Timeline</h2>
+
+            <div id="timeline" class="scroll-card">
+            </div>
+
+        </div>
+
+        <!-- Remote Controls Card -->
+        <div class="card full-width">
+
+            <h2>🎮 Remote Controls</h2>
+
+            <div class="controls">
+
+                <button class="capture-btn" onclick="captureDevice()">
+                    <span>📸</span> Capture
+                </button>
+
+                <button class="lock-btn" onclick="lockDevice()">
+                    <span>🔒</span> Lock
+                </button>
+
+                <button class="alarm-btn" onclick="alarmDevice()">
+                    <span>🔊</span> Alarm
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+    <script src="app.js"></script>
+
+    <script>
+        if ("serviceWorker" in navigator) {
+
+            navigator.serviceWorker
+                .register("/service-worker.js")
+                .then(() => {
+
+                    console.log(
+                        "Service Worker Registered"
+                    );
+
+                })
+                .catch(error => {
+
+                    console.error(
+                        "Service Worker Error:",
+                        error
+                    );
+
+                });
+
+        }
+    </script>
+
+</body>
+
+</html>

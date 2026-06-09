@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>📂 Evidence Center</title>
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>📂 Evidence Center</h1>
+
+    <!-- Tabs -->
+
+    <div class="tabs">
+
+        <button
+            id="photosBtn"
+            class="tab-btn"
+            onclick="showPhotos()">
+
+            📸 Photo Evidence
+
+        </button>
+
+        <button
+            id="videosBtn"
+            class="tab-btn"
+            onclick="showVideos()">
+
+            🎥 Video Evidence
+
+        </button>
+
+        <button
+            id="audioBtn"
+            class="tab-btn"
+            onclick="showAudio()">
+
+            🎤 Audio Evidence
+
+        </button>
+
+    </div>
+
+    <!-- Gallery -->
+
+    <div
+        id="gallery"
+        class="gallery-grid">
+
+    </div>
+
+</div>
+
+<!-- Fullscreen Modal -->
+
+<div
+    id="imageModal"
+    class="modal">
+
+    <span
+        class="close"
+        onclick="closeModal()">
+
+        &times;
+
+    </span>
+
+    <img
+        id="modalImage"
+        class="modal-content">
+
+</div>
+
+<script src="evidence.js"></script>
+
+</body>
+
+</html>

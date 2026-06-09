@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>📍 Live Device Tracking</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
+
+    <style>
+        #map {
+
+            height: 600px;
+
+            width: 100%;
+
+            border-radius: 20px;
+
+            margin-top: 20px;
+        }
+
+        #navigateBtn {
+
+            padding: 12px 20px;
+
+            border: none;
+
+            border-radius: 10px;
+
+            background: #00d4ff;
+
+            color: black;
+
+            font-size: 16px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            margin-bottom: 15px;
+        }
+
+        #navigateBtn:hover {
+
+            opacity: 0.9;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>📍 Live Device Tracking</h1>
+
+        <div class="card">
+
+            <button id="navigateBtn" onclick="navigateToDevice()">
+
+                🧭 Navigate To Laptop
+
+            </button>
+
+            <div id="map"></div>
+
+        </div>
+
+    </div>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="location.js"></script>
+
+</body>
+
+</html>
