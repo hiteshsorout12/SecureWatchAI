@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+
+    <title>
+
+        Settings
+
+    </title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+</head>
+
+<body>
+
+    <div class="dashboard">
+
+        <aside class="sidebar">
+
+            <div class="logo">
+
+                <i class="fa-solid fa-shield-halved"></i>
+
+                <h2>
+
+                    SecureWatch
+
+                </h2>
+
+            </div>
+
+            <nav>
+
+                <a href="/">
+
+                    🏠 Dashboard
+
+                </a>
+
+                <a href="/evidence">
+
+                    📂 Evidence
+
+                </a>
+
+                <a href="/location">
+
+                    📍 Location
+
+                </a>
+
+                <a class="active" href="/settings">
+
+                    ⚙ Settings
+
+                </a>
+
+            </nav>
+
+        </aside>
+
+        <main class="main">
+
+            <h1>
+
+                ⚙ SecureWatch Settings
+
+            </h1>
+
+            <br>
+
+            <div class="dashboard-row">
+
+                <div class="glass-card">
+
+                    <h2>
+
+                        General
+
+                    </h2>
+
+                    <br>
+
+                    <label>
+
+                        <input id="startup" type="checkbox">
+
+                        Start SecureWatch on Windows Startup
+
+                    </label>
+
+                    <br><br>
+
+                    <label>
+
+                        <input id="notification" type="checkbox">
+
+                        Desktop Notifications
+
+                    </label>
+
+                    <br><br>
+
+                    <label>
+
+                        <input id="email" type="checkbox">
+
+                        Email Alerts
+
+                    </label>
+
+                    <br><br>
+
+                    <label>
+
+                        <input id="sound" type="checkbox">
+
+                        Alarm Sound
+
+                    </label>
+
+                </div>
+
+                <div class="glass-card">
+
+                    <h2>
+
+                        Security
+
+                    </h2>
+
+                    <br>
+
+                    <button class="primary-btn" onclick="trainOwner()">
+
+                        👤 Register Owner Face
+
+                    </button>
+
+                    <br><br>
+
+                    <button class="warning-btn" onclick="changeEmail()">
+
+                        📧 Change Email
+
+                    </button>
+
+                    <br><br>
+
+                    <button class="danger-btn" onclick="clearEvidence()">
+
+                        🗑 Clear Evidence
+
+                    </button>
+
+                </div>
+
+            </div>
+
+            <br>
+
+            <button class="primary-btn" onclick="saveSettings()">
+
+                💾 Save Settings
+
+            </button>
+
+        </main>
+
+    </div>
+
+    <script src="/utils.js"></script>
+
+    <script src="/notification.js"></script>
+
+    <script src="/settings.js"></script>
+
+</body>
+
+</html>
+
+</body>
+
+</html>

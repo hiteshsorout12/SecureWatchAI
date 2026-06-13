@@ -1,173 +1,220 @@
-// Use the same server that served the page
-const API = window.location.origin;
+// ==========================================
+// SecureWatch AI
+// location.js
+// ==========================================
 
-let map;
-let marker;
 
-let currentLat = null;
-let currentLng = null;
+
+let latitude = null;
+let longitude = null;
+
+// ==========================================
+// Startup
+// ==========================================
+
+window.addEventListener(
+    "DOMContentLoaded",
+    async () => {
+
+        await loadLocation();
+
+        setInterval(
+            loadLocation,
+            30000
+        );
+
+    }
+);
+
+// ==========================================
+// Load Location
+// ==========================================
 
 async function loadLocation() {
 
     try {
 
-        const response =
-            await fetch(
-                `${API}/device/location-history`
-            );
+        const response = await fetch(`${API}/api/location`);
 
-        if (!response.ok) {
-            throw new Error(
-                `HTTP Error ${response.status}`
-            );
-        }
-
-        const data =
-            await response.json();
-
-        if (
-            !data ||
-            data.length === 0
-        ) {
-
-            document.getElementById(
-                "map"
-            ).innerHTML = `
-                <div style="
-                    color:white;
-                    text-align:center;
-                    padding:30px;
-                ">
-                    📍 No Location Data Found
-                </div>
-            `;
-
+        const data = await response.json();
+        if (!response.ok || data.success === false) {
             return;
         }
+        latitude = data.latitude;
+        longitude = data.longitude;
 
-        const latest =
-            data[0];
+        latitude = data.latitude;
+        longitude = data.longitude;
 
-        const lat =
-            parseFloat(
-                latest.latitude
-            );
+        setValue("latitude", data.latitude);
+        setValue("longitude", data.longitude);
 
-        const lng =
-            parseFloat(
-                latest.longitude
-            );
+        setValue("city", data.city);
+        setValue("country", data.country);
 
-        if (
-            isNaN(lat) ||
-            isNaN(lng)
-        ) {
+        setValue("accuracy", data.accuracy || "GPS");
 
-            throw new Error(
-                "Invalid Coordinates"
-            );
-        }
+        setValue(
+            "lastUpdate",
+            new Date(data.timestamp).toLocaleString()
+        );
 
-        currentLat = lat;
-        currentLng = lng;
-
-        if (!map) {
-
-            map = L.map(
-                "map"
-            ).setView(
-                [lat, lng],
-                15
-            );
-
-            L.tileLayer(
-                "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-                {
-                    attribution:
-                        "© OpenStreetMap Contributors",
-                    maxZoom: 19
-                }
-            ).addTo(map);
-
-            marker = L.marker(
-                [lat, lng]
-            ).addTo(map);
-
-            marker.bindPopup(
-                `
-                <b>💻 SecureWatch Device</b>
-                <br>
-                Lat: ${lat}
-                <br>
-                Lng: ${lng}
-                `
-            );
-
-        } else {
-
-            marker.setLatLng(
-                [lat, lng]
-            );
-
-            map.setView(
-                [lat, lng],
-                15
-            );
-        }
+        loadMap();
 
     }
 
-    catch (error) {
+    catch (e) {
 
         console.error(
-            "Location Load Error:",
-            error
+
+            "Location Error:",
+
+            e
+
         );
 
-        document.getElementById(
-            "map"
-        ).innerHTML = `
-            <div style="
-                color:white;
-                text-align:center;
-                padding:30px;
-            ">
-                ❌ Failed To Load Map
-                <br><br>
-                ${error.message}
-            </div>
-        `;
     }
+
 }
 
+// ==========================================
+// Load Google Map
+// ==========================================
 
-function navigateToDevice() {
+function loadMap() {
 
     if (
-        currentLat === null ||
-        currentLng === null
-    ) {
 
-        alert(
-            "📍 Location Not Loaded Yet"
-        );
+        latitude == null ||
+
+        longitude == null
+
+    )
 
         return;
-    }
 
-    window.open(
-        `https://www.google.com/maps/dir/?api=1&destination=${currentLat},${currentLng}`,
-        "_blank"
-    );
+    document.getElementById(
+
+        "map"
+
+    ).src =
+
+        `https://maps.google.com/maps?q=${latitude},${longitude}&z=16&output=embed`;
+
 }
 
+// ==========================================
+// Refresh
+// ==========================================
 
-// Initial Load
-loadLocation();
+async function refreshLocation() {
 
+    await loadLocation();
 
-// Auto Refresh Every 10 Seconds
-setInterval(
-    loadLocation,
-    10000
+    alert(
+
+        "Location Updated"
+
+    );
+
+}
+
+// ==========================================
+// Navigation
+// ==========================================
+
+function navigateLocation() {
+
+    if (
+
+        latitude == null ||
+
+        longitude == null
+
+    )
+
+        return;
+
+    window.open(
+
+        `https://www.google.com/maps/dir/?api=1&destination=${latitude},${longitude}`,
+
+        "_blank"
+
+    );
+
+}
+
+// ==========================================
+// Copy Coordinates
+// ==========================================
+
+function copyCoordinates() {
+
+    navigator.clipboard.writeText(
+
+        `${latitude}, ${longitude}`
+
+    );
+
+    alert(
+
+        "Coordinates Copied"
+
+    );
+
+}
+
+// ==========================================
+// Open Google Maps
+// ==========================================
+
+function openGoogleMaps() {
+
+    if (
+
+        latitude == null ||
+
+        longitude == null
+
+    )
+
+        return;
+
+    window.open(
+
+        `https://maps.google.com/?q=${latitude},${longitude}`,
+
+        "_blank"
+
+    );
+
+}
+
+// ==========================================
+// Location Status
+// ==========================================
+
+function locationAvailable() {
+
+    return (
+
+        latitude !== null &&
+
+        longitude !== null
+
+    );
+
+}
+
+// ==========================================
+// Console
+// ==========================================
+
+console.log(
+
+    "%c📍 Location Module Loaded",
+
+    "color:#4CAF50;font-size:14px;font-weight:bold"
+
 );

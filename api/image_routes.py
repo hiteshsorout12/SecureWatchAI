@@ -42,3 +42,16 @@ def get_video(video_path):
         video_path,
         mimetype="video/mp4"
     )
+@image_bp.route("/audio/<path:audio_path>")
+def get_audio(audio_path):
+
+    if not os.path.exists(audio_path):
+
+        return jsonify({
+            "error": "Audio not found"
+        }), 404
+
+    return send_file(
+        audio_path,
+        mimetype="audio/wav"
+    )

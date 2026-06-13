@@ -2,6 +2,8 @@ from flask import Blueprint
 from flask import jsonify
 from flask import request
 
+from flask import send_file
+
 from sqlalchemy.orm import sessionmaker
 
 from database.connection import engine
@@ -29,7 +31,7 @@ def get_events():
         result.append({
             "id": event.id,
             "event_type": event.event_type,
-            "risk_level": event.risk_level,
+            "risk_score": event.risk_score,
             "status": event.status
         })
 
@@ -59,3 +61,4 @@ def create_event():
     return jsonify({
         "message": "Event Created Successfully"
     })
+    

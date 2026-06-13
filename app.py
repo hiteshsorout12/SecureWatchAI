@@ -2,6 +2,7 @@ from flask import Flask
 from flask_cors import CORS
 from flask import send_from_directory
 from flask import send_file
+from flask import Response
 
 from api.audit_routes import audit_bp
 from api.alert_routes import alert_bp
@@ -18,6 +19,11 @@ from api.analytics_routes import analytics_bp
 from api.risk_analytics_routes import risk_analytics_bp
 from api.dashboard_alert_routes import dashboard_alerts_bp
 from api.timeline_routes import timeline_bp
+from api.socket_test_routes import socket_test_bp
+from api.emergency_routes import emergency_bp
+from api.live_audio_routes import live_audio_bp
+from api.event_details_routes import event_details_bp
+from api.settings_routes import settings_bp
 
 from database.connection import engine
 from database.base import Base
@@ -35,14 +41,18 @@ from models.location_history import LocationHistory
 from models.location_history import (
     LocationHistory
 )
+from models.security_session import SecuritySession
+
+import services.webrtc_signaling
 
 from socket_manager import socketio
+
+from camera.stream import generate_frames, start_camera, stop_camera
 
 # Create tables
 Base.metadata.create_all(bind=engine)
 
 print("All Tables Created")
-
 # Flask App
 app = Flask(__name__)
 
@@ -50,7 +60,9 @@ CORS(app)
 
 socketio.init_app(
     app,
-    cors_allowed_origins="*"
+    cors_allowed_origins="*",
+    logger=True,
+    engineio_logger=True
 )
 
 
@@ -138,24 +150,6 @@ def history_css():
         "dashboard/frontend",
         "history.css"
     )
-
-
-@app.route("/evidence/photos/<filename>")
-def serve_photo(filename):
-
-    return send_from_directory(
-        "evidence/photos",
-        filename
-    )
-
-
-@app.route("/evidence/videos/<filename>")
-def serve_video(filename):
-
-    return send_from_directory(
-        "evidence/videos",
-        filename
-    )
     
 @app.route("/manifest.json")
 def manifest():
@@ -173,6 +167,191 @@ def favicon():
         "favicon.ico"
     )
     
+@app.route("/video_feed")
+def video_feed():
+
+    start_camera()
+
+    return Response(
+
+        generate_frames(),
+
+        mimetype="multipart/x-mixed-replace; boundary=frame"
+
+    )
+
+@app.route(
+    "/video_stop",
+    methods=["POST"]
+)
+def video_stop():
+
+    stop_camera()
+
+    return {
+        "message": "Camera Stopped"
+    }
+    
+@app.route("/device")
+def device_page():
+
+    return send_from_directory(
+        "dashboard/frontend",
+        "device.html"
+    )
+
+
+@app.route("/remote")
+def remote_page():
+
+    return send_from_directory(
+        "dashboard/frontend",
+        "remote.html"
+    )
+
+
+@app.route("/alerts")
+def alerts_page():
+
+    return send_from_directory(
+        "dashboard/frontend",
+        "alerts.html"
+    )
+    
+@app.route("/socket.io.min.js")
+def socketio_client():
+
+    return send_from_directory(
+        "dashboard/frontend",
+        "socket.io.min.js"
+    )
+
+@app.route("/utils.js")
+def utils_js():
+
+    return send_from_directory(
+        "dashboard/frontend",
+        "utils.js"
+    )
+
+
+@app.route("/notification.js")
+def notification_js():
+
+    return send_from_directory(
+        "dashboard/frontend",
+        "notification.js"
+    )
+
+
+@app.route("/camera.js")
+def camera_js():
+
+    return send_from_directory(
+        "dashboard/frontend",
+        "camera.js"
+    )
+
+
+@app.route("/analytics.js")
+def analytics_js():
+
+    return send_from_directory(
+        "dashboard/frontend",
+        "analytics.js"
+    )
+
+
+@app.route("/remote.js")
+def remote_js():
+
+    return send_from_directory(
+        "dashboard/frontend",
+        "remote.js"
+    )
+
+
+@app.route("/socket.js")
+def socket_js():
+
+    return send_from_directory(
+        "dashboard/frontend",
+        "socket.js"
+    )
+
+
+@app.route("/dashboard.js")
+def dashboard_js():
+
+    return send_from_directory(
+        "dashboard/frontend",
+        "dashboard.js"
+    )
+
+
+@app.route("/settings")
+def settings_page():
+
+    return send_from_directory(
+        "dashboard/frontend",
+        "settings.html"
+    )
+
+
+@app.route("/settings.js")
+def settings_js():
+
+    return send_from_directory(
+        "dashboard/frontend",
+        "settings.js"
+    )
+
+
+@app.route("/login")
+def login_page():
+
+    return send_from_directory(
+        "dashboard/frontend",
+        "login.html"
+    )
+
+
+@app.route("/login.js")
+def login_js():
+
+    return send_from_directory(
+        "dashboard/frontend",
+        "login.js"
+    )
+
+
+@app.route("/login.css")
+def login_css():
+
+    return send_from_directory(
+        "dashboard/frontend",
+        "login.css"
+    )
+    
+@app.route("/video/<path:filepath>")
+def serve_video(filepath):
+
+    return send_file(filepath)
+
+@app.route("/audio/<path:filepath>")
+def serve_audio(filepath):
+
+    return send_file(filepath)
+
+@app.route("/style.css")
+def style_css():
+    return send_from_directory(
+        "dashboard/frontend",
+        "style.css"
+    )
+
+
+    
 # Register Blueprints
 app.register_blueprint(alert_bp)
 app.register_blueprint(evidence_bp)
@@ -189,11 +368,16 @@ app.register_blueprint(analytics_bp)
 app.register_blueprint(risk_analytics_bp)
 app.register_blueprint(dashboard_alerts_bp)
 app.register_blueprint(timeline_bp)
+app.register_blueprint(socket_test_bp)
+app.register_blueprint(emergency_bp)
+app.register_blueprint(live_audio_bp)
+app.register_blueprint(event_details_bp)
+app.register_blueprint(settings_bp)
 
 socketio.run(
     app,
     host="0.0.0.0",
     port=5000,
-    debug=True,
+    debug=False,
     allow_unsafe_werkzeug=True
 )

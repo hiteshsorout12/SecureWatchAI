@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SecureWatch AI Dashboard</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+</head>
+
+<body>
+
+    <div class="dashboard">
+
+        <aside class="sidebar">
+
+            <div class="logo">
+
+                <div class="logo-icon">
+                    <i class="fa-solid fa-shield-halved"></i>
+                </div>
+
+                <div>
+
+                    <h2>SecureWatch</h2>
+
+                    <span>AI Security</span>
+
+                </div>
+
+            </div>
+
+            <nav>
+
+                <a href="/" class="nav-link">
+
+                    <i class="fa-solid fa-table-columns"></i>
+
+                    Dashboard
+
+                </a>
+
+                <a href="/device" class="nav-link">
+
+                    <i class="fa-solid fa-laptop"></i>
+
+                    Device Status
+
+                </a>
+
+                <a href="/evidence" class="nav-link">
+
+                    <i class="fa-solid fa-camera"></i>
+
+                    Evidence
+
+                </a>
+
+                <a href="/location" class="nav-link">
+
+                    <i class="fa-solid fa-location-dot"></i>
+
+                    Location
+
+                </a>
+
+                <a href="/history" class="nav-link">
+
+                    <i class="fa-solid fa-clock-rotate-left"></i>
+
+                    History
+
+                </a>
+
+                <a href="/remote" class="nav-link">
+
+                    <i class="fa-solid fa-sliders"></i>
+
+                    Remote Controls
+
+                </a>
+
+                <a href="/alerts" class="nav-link">
+
+                    <i class="fa-solid fa-bell"></i>
+
+                    Alerts
+
+                </a>
+
+                <a href="/settings" class="nav-link">
+
+                    <i class="fa-solid fa-gear"></i>
+
+                    Settings
+
+                </a>
+
+            </nav>
+
+            <div class="system-box">
+
+                <h4>System Status</h4>
+
+                <div class="system-online">
+
+                    <span class="pulse"></span>
+
+                    Online
+
+                </div>
+
+                <small>
+
+                    AI Monitoring Active
+
+                </small>
+
+            </div>
+
+        </aside>
+
+        <main class="main">
+
+            <header class="topbar">
+
+                <div>
+
+                    <h1>
+
+                        SecureWatch AI Dashboard
+
+                    </h1>
+
+                    <p>
+
+                        Intelligent Laptop Security &
+                        Intrusion Monitoring
+
+                    </p>
+
+                </div>
+
+                <div class="top-right">
+
+                    <div class="time-card">
+
+                        <i class="fa-regular fa-clock"></i>
+
+                        <div>
+
+                            <h3 id="liveTime">
+
+                                12:45 PM
+
+                            </h3>
+
+                            <span id="liveDate">
+
+                                Loading...
+
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </header>
+
+            <section class="cards">
+
+                <div class="status-card blue">
+
+                    <i class="fa-solid fa-laptop"></i>
+
+                    <div>
+
+                        <h3 id="deviceStatus">
+
+                            Online
+
+                        </h3>
+
+                        <span>
+
+                            Device Status
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+                <div class="status-card green">
+
+                    <i class="fa-solid fa-location-dot"></i>
+
+                    <div>
+
+                        <h3 id="city">
+
+                            Unknown
+
+                        </h3>
+
+                        <span>
+
+                            Current Location
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+                <div class="status-card orange">
+
+                    <i class="fa-solid fa-network-wired"></i>
+
+                    <div>
+
+                        <h3 id="ipAddress">
+
+                            --
+
+                        </h3>
+
+                        <span>
+
+                            IP Address
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+                <div class="status-card red">
+
+                    <i class="fa-solid fa-clock"></i>
+
+                    <div>
+
+                        <h3 id="lastSeen">
+
+                            --
+
+                        </h3>
+
+                        <span>
+
+                            Last Update
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="content-grid">
+
+                <div class="glass-card device-card">
+
+                    <div class="card-header">
+
+                        <h2>
+                            <i class="fa-solid fa-desktop"></i>
+                            Device Information
+                        </h2>
+
+                    </div>
+
+                    <div class="info-grid">
+
+                        <div class="info-item">
+
+                            <span>Device Name</span>
+
+                            <strong id="deviceName">
+                                Loading...
+                            </strong>
+
+                        </div>
+
+                        <div class="info-item">
+
+                            <span>Status</span>
+
+                            <strong id="deviceStatus2" class="online">
+
+                                Online
+
+                            </strong>
+
+                        </div>
+
+                        <div class="info-item">
+
+                            <span>IP Address</span>
+
+                            <strong id="ipAddress2">
+                                --
+                            </strong>
+
+                        </div>
+
+                        <div class="info-item">
+
+                            <span>City</span>
+
+                            <strong id="city2">
+                                --
+                            </strong>
+
+                        </div>
+
+                        <div class="info-item">
+
+                            <span>Country</span>
+
+                            <strong id="country">
+                                --
+                            </strong>
+
+                        </div>
+
+                        <div class="info-item">
+
+                            <span>Latitude</span>
+
+                            <strong id="latitude">
+                                --
+                            </strong>
+
+                        </div>
+
+                        <div class="info-item">
+
+                            <span>Longitude</span>
+
+                            <strong id="longitude">
+                                --
+                            </strong>
+
+                        </div>
+
+                        <div class="info-item">
+
+                            <span>Last Seen</span>
+
+                            <strong id="lastSeen2">
+                                --
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="glass-card evidence-card">
+
+                    <div class="card-header">
+
+                        <h2>
+
+                            <i class="fa-solid fa-camera"></i>
+
+                            Latest Evidence
+
+                        </h2>
+
+                    </div>
+
+                    <div class="evidence-image">
+
+                        <img id="latestImage" src="" alt="Evidence">
+
+                    </div>
+
+                    <div class="evidence-details">
+
+                        <div>
+
+                            <span>Event ID</span>
+
+                            <strong id="eventId">
+
+                                --
+
+                            </strong>
+
+                        </div>
+
+                        <div>
+
+                            <span>Photo</span>
+
+                            <strong id="photoPath">
+
+                                --
+
+                            </strong>
+
+                        </div>
+
+                        <div>
+
+                            <span>Video</span>
+
+                            <strong id="videoPath">
+
+                                --
+
+                            </strong>
+
+                        </div>
+
+                        <div>
+
+                            <span>Audio</span>
+
+                            <strong id="audioPath">
+
+                                --
+
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="camera-section">
+
+                <div class="glass-card">
+
+                    <div class="card-header">
+
+                        <h2>
+
+                            <i class="fa-solid fa-video"></i>
+
+                            Live Camera
+
+                        </h2>
+
+                        <div id="cameraStatus" class="live-badge">
+
+                            ⚪ OFFLINE
+
+                        </div>
+
+                    </div>
+
+                    <div class="camera-frame">
+
+                        <div id="cameraPlaceholder" class="camera-placeholder">
+
+                            <i class="fa-solid fa-video-slash"></i>
+
+                            <h3>
+
+                                Live Camera Offline
+
+                            </h3>
+
+                            <p>
+
+                                Click Start Live View
+
+                            </p>
+
+                        </div>
+
+                        <img id="liveFeed" src="" alt="Live Camera"
+                            style="display:none; width:100%; border-radius:16px;">
+
+                    </div>
+
+                    <div class="camera-controls">
+
+                        <button id="liveViewBtn" class="primary-btn" onclick="toggleLiveView()">
+
+                            <i class="fa-solid fa-video"></i>
+
+                            Start Live View
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="control-grid">
+
+                <!-- Remote Controls -->
+
+                <div class="glass-card" id="remote">
+
+                    <div class="card-header">
+
+                        <h2>
+
+                            <i class="fa-solid fa-gamepad"></i>
+
+                            Remote Controls
+
+                        </h2>
+
+                    </div>
+
+                    <div class="button-grid">
+
+                        <button id="captureBtn" class="primary-btn" onclick="remoteCapture()">
+
+                            <i class="fa-solid fa-camera"></i>
+
+                            Capture Photo
+
+                        </button>
+
+                        <button id="alarmBtn" class="danger-btn" onclick="triggerAlarm()">
+
+                            <i class="fa-solid fa-volume-high"></i>
+
+                            Trigger Alarm
+
+                        </button>
+
+                        <button id="lockBtn" class="warning-btn" onclick="lockDevice()">
+
+                            <i class="fa-solid fa-lock"></i>
+
+                            Lock Device
+
+                        </button>
+
+                        <button id="emergencyBtn" class="danger-btn" data-mode="start" onclick="toggleEmergency()">
+
+                            🚨 Start Emergency
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+                <!-- Quick Actions -->
+
+                <div class="glass-card">
+
+                    <div class="card-header">
+
+                        <h2>
+
+                            <i class="fa-solid fa-bolt"></i>
+
+                            Quick Actions
+
+                        </h2>
+
+                    </div>
+
+                    <div class="button-grid">
+
+                        <button id="liveViewBtn2" class="secondary-btn" onclick="toggleLiveView()">
+
+                            <i class="fa-solid fa-video"></i>
+
+                            Live Camera
+
+                        </button>
+
+                        <button id="refreshBtn" class="secondary-btn" onclick="refreshDashboard()">
+
+                            <i class="fa-solid fa-rotate"></i>
+
+                            Refresh Dashboard
+
+                        </button>
+
+                        <button onclick="location.href='/history'" class="secondary-btn">
+
+                            <i class="fa-solid fa-clock-rotate-left"></i>
+
+                            History
+
+                        </button>
+
+                        <button onclick="location.href='/location'" class="secondary-btn">
+
+                            <i class="fa-solid fa-location-dot"></i>
+
+                            Location
+
+                        </button>
+
+                        <button onclick="location.href='/evidence'" class="secondary-btn">
+
+                            <i class="fa-solid fa-folder-open"></i>
+
+                            Evidence
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="analytics-grid">
+
+                <div class="glass-card">
+
+                    <div class="card-header">
+
+                        <h2>
+
+                            <i class="fa-solid fa-chart-line"></i>
+
+                            Security Analytics
+
+                        </h2>
+
+                    </div>
+
+                    <div class="analytics-box">
+
+                        <div class="analytics-item">
+
+                            <h1 id="totalEvents">
+
+                                0
+
+                            </h1>
+
+                            <span>
+
+                                Total Events
+
+                            </span>
+
+                        </div>
+
+                        <div class="analytics-item">
+
+                            <h1 id="highRisk">
+
+                                0
+
+                            </h1>
+
+                            <span>
+
+                                High Risk
+
+                            </span>
+
+                        </div>
+
+                        <div class="analytics-item">
+
+                            <h1 id="todayEvents">
+
+                                0
+
+                            </h1>
+
+                            <span>
+
+                                Today's Events
+
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="glass-card">
+
+                    <div class="card-header">
+
+                        <h2>
+
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+
+                            Risk Assessment
+
+                        </h2>
+
+                    </div>
+
+                    <div class="risk-circle">
+
+                        <div id="riskScore">
+
+                            0%
+
+                        </div>
+
+                    </div>
+
+                    <div class="risk-level">
+
+                        <span>
+
+                            Current Risk
+
+                        </span>
+
+                        <strong id="riskLevel">
+
+                            SAFE
+
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="bottom-grid">
+
+                <div class="glass-card">
+
+                    <div class="card-header">
+
+                        <h2>
+
+                            <i class="fa-solid fa-clock"></i>
+
+                            Activity Timeline
+
+                        </h2>
+
+                    </div>
+
+                    <div id="timelineContainer" class="timeline">
+
+                    </div>
+
+                </div>
+
+                <div class="glass-card" id="alerts">
+
+                    <div class="card-header">
+
+                        <h2>
+
+                            <i class="fa-solid fa-bell"></i>
+
+                            Recent Alerts
+
+                        </h2>
+
+                    </div>
+
+                    <div id="alertsContainer" class="alerts-list">
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <footer class="footer">
+
+                <p>
+
+                    © 2026 SecureWatch AI
+
+                    Intelligent Laptop Intrusion Detection System
+
+                </p>
+
+            </footer>
+
+        </main>
+
+    </div>
+
+    <div id="notificationContainer" class="notification-container">
+
+    </div>
+
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+
+    <script src="app.js"></script>
+
+    <script>
+
+        const liveTime = document.getElementById("liveTime");
+        const liveDate = document.getElementById("liveDate");
+
+        function updateClock() {
+
+            const now = new Date();
+
+            liveTime.innerHTML =
+                now.toLocaleTimeString(
+                    [],
+                    {
+                        hour: "2-digit",
+                        minute: "2-digit"
+                    }
+                );
+
+            liveDate.innerHTML =
+                now.toDateString();
+
+        }
+
+        setInterval(
+            updateClock,
+            1000
+        );
+
+        updateClock();
+
+        if (
+            "serviceWorker"
+            in navigator
+        ) {
+
+            navigator.serviceWorker
+                .register(
+                    "/service-worker.js"
+                );
+
+        }
+
+    </script>
+
+</body>
+
+</html>

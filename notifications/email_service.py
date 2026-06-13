@@ -1,7 +1,9 @@
 import os
 import smtplib
+import threading
 
 from email.message import EmailMessage
+import traceback
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -12,17 +14,9 @@ def send_email_alert(
         body,
         attachment_path=None):
 
-    sender = os.getenv(
-        "EMAIL_ADDRESS"
-    )
-
-    password = os.getenv(
-        "EMAIL_PASSWORD"
-    )
-
-    receiver = os.getenv(
-        "ALERT_RECEIVER"
-    )
+    sender = os.getenv("EMAIL_ADDRESS")
+    password = os.getenv("EMAIL_PASSWORD")
+    receiver = os.getenv("ALERT_RECEIVER")
 
     msg = EmailMessage()
 
@@ -40,7 +34,6 @@ def send_email_alert(
         ) as file:
 
             file_data = file.read()
-
             file_name = os.path.basename(
                 attachment_path
             )
@@ -52,18 +45,46 @@ def send_email_alert(
             filename=file_name
         )
 
-    with smtplib.SMTP_SSL(
-        "smtp.gmail.com",
-        465
-    ) as smtp:
+    try:
 
-        smtp.login(
-            sender,
-            password
-        )
+        with smtplib.SMTP_SSL(
+            "smtp.gmail.com",
+            465,
+            timeout=15
+        ) as smtp:
 
-        smtp.send_message(msg)
+            smtp.login(
+                sender,
+                password
+            )
 
-    print(
-        "Email Sent Successfully"
+            smtp.send_message(msg)
+
+        print("✅ Email Sent Successfully")
+
+        return True
+
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        print(f"❌ Email Failed: {type(e).__name__}: {e}")
+        return False
+
+
+def send_email_async(
+        subject,
+        body,
+        attachment_path=None):
+
+    thread = threading.Thread(
+        target=send_email_alert,
+        kwargs={
+            "subject": subject,
+            "body": body,
+            "attachment_path": attachment_path
+        }
     )
+
+    thread.start()
+
+    return thread

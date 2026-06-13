@@ -20,4 +20,12 @@ DATABASE_URL = (
 
 engine = create_engine(DATABASE_URL)
 
+from sqlalchemy.orm import sessionmaker
+
+SessionLocal = sessionmaker(
+    autocommit=False,
+    autoflush=False,
+    bind=engine
+)
+
 print("Database Engine Created Successfully")

@@ -9,7 +9,6 @@ class Event(Base):
     id = Column(
         String,
         primary_key=True,
-        default=lambda: str(uuid.uuid4())
     )
 
     event_type = Column(String(100))

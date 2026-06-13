@@ -39,9 +39,9 @@ def get_latest_evidence():
 
         return {
             "event_id": evidence.event_id,
-            "photo_path": evidence.photo_path,
-            "video_path": evidence.video_path,
-            "audio_path": evidence.audio_path
+            "photo_path": evidence.photo_path.replace("\\", "/"),
+            "video_path": evidence.video_path.replace("\\", "/"),
+            "audio_path": evidence.audio_path.replace("\\", "/")
         }
 
     finally:

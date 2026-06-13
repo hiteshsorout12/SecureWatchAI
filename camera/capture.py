@@ -6,18 +6,35 @@ from datetime import datetime
 
 from face_recognition_module.recognizer import recognize_face
 from camera.camera_service import open_camera
-from camera.video_capture import record_video
+from camera.evidence_recorder import evidence_recorder
 
+from models import event
 from services.event_service import create_event
+from services.evidence_folder import create_evidence_folder
 from services.evidence_service import create_evidence
 from services.audit_service import create_audit_log
 from services.risk_engine import calculate_risk
-from services.socket_service import send_live_alert
+from services.socket_service import (
+    send_live_alert,
+    publish_event,
+    publish_evidence,
+    publish_risk,
+    publish_analytics,
+    publish_timeline
+)
+from services.security_session import security_session
+from services.security_session_service import start_session
+from services.evidence_metadata import save_metadata
+from services.evidence_folder import create_evidence_folder
 
-from notifications.email_service import send_email_alert
+from notifications.email_service import (
+    send_email_alert,
+    send_email_async
+)
 
 
 def capture_photo():
+    print("🔥 NEW CAPTURE VERSION")
 
     camera = None
 
@@ -62,16 +79,14 @@ def capture_photo():
 
             return
 
-        file_timestamp = datetime.now().strftime(
-            "%Y%m%d_%H%M%S"
-        )
-
+        event = create_evidence_folder()
+        event_id = event["event_id"]
+        event_folder =event["folder"]
         display_time = datetime.now().strftime(
             "%A, %d %B %Y | %I:%M:%S %p"
         )
-
-        photo_path = (
-            f"evidence/photos/{file_timestamp}.jpg"
+        photo_path = str(
+            event_folder / "photo.jpg"
         )
 
         saved = cv2.imwrite(
@@ -117,6 +132,11 @@ def capture_photo():
             print(
                 "OWNER DETECTED"
             )
+            
+            if camera is not None:
+                camera.release()
+                camera = None
+            cv2.destroyAllWindows()
 
             send_email_alert(
                 subject="✅ SecureWatch Login Notification",
@@ -138,6 +158,8 @@ SAFE LOGIN
             )
 
             return
+        
+        security_session.start()
 
         print(
             "INTRUDER DETECTED"
@@ -154,7 +176,13 @@ SAFE LOGIN
             unknown_face=True,
             multiple_attempts=False
         )
-
+        
+        start_session(
+            session_type="EMERGENCY",
+            risk_score=risk["risk_score"],
+            status=risk["risk_level"]
+        )
+        
         print(
             f"Risk Score: {risk['risk_score']}"
         )
@@ -162,12 +190,10 @@ SAFE LOGIN
         print(
             f"Risk Level: {risk['risk_level']}"
         )
-
-        try:
-
-            send_email_alert(
-                subject="🚨 SecureWatch Intruder Alert",
-                body=f"""
+        
+        send_email_async(
+            subject="🚨 SecureWatch Intruder Alert",
+            body=f"""
 🚨 HIGH RISK INTRUDER DETECTED
 
 📅 Time:
@@ -196,42 +222,77 @@ Open dashboard to view photos and videos.
 
 SecureWatch AI Security System
 """,
-                attachment_path=photo_path
-            )
+            attachment_path=photo_path
+        )
 
-            print(
-                "Alert Email Sent"
+        send_live_alert(
+            title="📧 Email Started",
+            message="Emergency email is being sent in background.",
+            level="info"
+        )
+        
+        create_event(
+            event_id=event_id,
+            event_type="CAMERA_CAPTURE",
+            risk_score=risk["risk_score"],
+            status=risk["risk_level"]
+        )
+
+        def video_finished(video_path):
+            print("🎥 Video Ready:", video_path)
+            from pathlib import Path
+            folder = Path(video_path).parent
+            save_metadata(
+                folder=folder,
+                risk=risk,
+                owner=False,
+                event_type="CAMERA_CAPTURE",
+                photo=photo_path,
+                video=video_path,
+                audio=str(folder / "audio.wav")
             )
             
-            send_live_alert(
-                title="📧 Email Sent",
-                message="Emergency email successfully delivered.",
-                level="success"
-            )
-
-        except Exception as e:
-
-            print(
-                "Email Failed:",
-                e
-            )
-
-        video_path = record_video(5)
-
-        try:
-
-            event_id = create_event(
-                event_type="CAMERA_CAPTURE",
-                risk_score=risk["risk_score"],
-                status=risk["risk_level"]
-            )
-
             create_evidence(
                 event_id=event_id,
                 photo_path=photo_path,
                 video_path=video_path,
-                audio_path=""
+                audio_path=str(folder / "audio.wav")
             )
+
+            send_live_alert(
+                title="🎥 Video Saved",
+                message="Evidence recording completed.",
+                level="success"
+            )
+
+        evidence_recorder.record_async(
+            event_folder=event_folder,
+            callback=video_finished,
+            post_seconds=10
+        )
+
+        try:
+
+            publish_event({
+                "event_id": event_id,
+                "event_type": "CAMERA_CAPTURE",
+                "risk_level": risk["risk_level"]
+            })
+
+            publish_evidence({
+                "event_id": event_id,
+                "photo_path": photo_path,
+                "video_path": "PROCESSING"
+            })
+
+            publish_risk({
+                "risk_score": risk["risk_score"],
+                "risk_level": risk["risk_level"]
+            })
+
+            publish_analytics()
+
+            publish_timeline()
 
             create_audit_log(
                 action="PHOTO_CAPTURED",
@@ -250,22 +311,15 @@ SecureWatch AI Security System
                 status="SUCCESS"
             )
 
-            print(
-                "Workflow Completed"
-            )
-            
             send_live_alert(
-                title="✅ Evidence Saved",
-                message="Photo, video and logs saved successfully.",
+                title="✅ Photo Saved",
+                message="Photo saved. Video is processing in background.",
                 level="success"
             )
 
         except Exception as e:
 
-            print(
-                "Database Error:",
-                e
-            )
+            print("Database Error:", e)
 
     finally:
 
@@ -273,6 +327,8 @@ SecureWatch AI Security System
             camera.release()
 
         cv2.destroyAllWindows()
+
+        security_session.stop()
 
 
 if __name__ == "__main__":

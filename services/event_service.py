@@ -6,26 +6,32 @@ from models.event import Event
 Session = sessionmaker(bind=engine)
 
 
-def create_event(event_type,
-                 risk_score,
-                 status):
+def create_event(
+    event_id,
+    event_type,
+    risk_score,
+    status
+):
 
     session = Session()
 
-    event = Event(
-        event_type=event_type,
-        risk_score=risk_score,
-        status=status
-    )
+    try:
 
-    session.add(event)
+        event = Event(
+            id=event_id,
+            event_type=event_type,
+            risk_score=risk_score,
+            status=status
+        )
 
-    session.commit()
+        session.add(event)
+        session.commit()
 
-    event_id = event.id
+        print("Event Created")
 
-    print("Event Created")
+        # Return the ID that was passed in
+        return event_id
 
-    session.close()
+    finally:
 
-    return event_id
+        session.close()

@@ -1,3 +1,5 @@
+import threading
+
 from camera.capture import (
     capture_photo
 )
@@ -9,9 +11,12 @@ def remote_capture():
         "Remote Capture Triggered"
     )
 
-    capture_photo()
+    threading.Thread(
+        target=capture_photo,
+        daemon=True
+    ).start()
 
     return {
-        "message":
-        "Capture Triggered"
+        "success": True,
+        "message": "Capture Started"
     }

@@ -14,36 +14,41 @@ Session = sessionmaker(
     bind=engine
 )
 
-
 @location_bp.route(
-    "/device/location-history",
+    "/api/location",
     methods=["GET"]
 )
-def get_location_history():
+def get_current_location():
 
     session = Session()
 
-    locations = (
+    location = (
         session.query(LocationHistory)
         .order_by(
             desc(LocationHistory.timestamp)
         )
-        .limit(50)
-        .all()
+        .first()
     )
 
-    result = []
+    if not location:
 
-    for location in locations:
+        return {
+            "success": False
+        },404
 
-        result.append(
-            {
-                "latitude": location.latitude,
-                "longitude": location.longitude,
-                "timestamp": str(
-                    location.timestamp
-                )
-            }
-        )
+    return {
+        "device_name": location.device_name,
 
-    return result
+        "latitude": location.latitude,
+
+        "longitude": location.longitude,
+
+        "city": "Unknown",
+
+        "country": "Unknown",
+
+        "accuracy": "GPS",
+
+        "timestamp": str(location.timestamp)
+
+    }

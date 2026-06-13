@@ -17,33 +17,56 @@ from remote.alarm_action import (
     remote_alarm
 )
 
+from remote.panic_action import (
+    remote_panic
+)
+
+@remote_bp.route("/remote/alarm", methods=["POST"])
+def alarm_now():
+
+    print("=" * 50)
+    print("ALARM API HIT")
+    print("=" * 50)
+
+    result = remote_alarm()
+
+    return result
+
+@remote_bp.route("/remote/lock", methods=["POST"])
+def lock_now():
+
+    print("=" * 50)
+    print("LOCK API HIT")
+    print("=" * 50)
+
+    result = remote_lock()
+
+    return result
 
 @remote_bp.route(
     "/remote/capture",
     methods=["POST"]
 )
 def capture_now():
-
+    
     result = remote_capture()
 
     return result
 
 @remote_bp.route(
-    "/remote/alarm",
+    "/remote/panic",
     methods=["POST"]
 )
-def alarm_now():
+def panic_now():
 
-    result = remote_alarm()
+    print(
+        "🚨 Panic Mode Requested"
+    )
 
-    return result
+    return remote_panic()
 
-@remote_bp.route(
-    "/remote/lock",
-    methods=["POST"]
-)
-def lock_now():
 
-    result = remote_lock()
 
-    return result
+
+
+

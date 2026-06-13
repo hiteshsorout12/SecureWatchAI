@@ -1,87 +1,104 @@
 <!DOCTYPE html>
-<html>
+
+<html lang="en">
 
 <head>
 
-    <title>📂 Evidence Center</title>
+    <meta charset="UTF-8">
 
-    <link
-        rel="stylesheet"
-        href="style.css"
-    >
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+    <title>
+
+        Evidence Center
+
+    </title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
 </head>
 
 <body>
 
-<div class="container">
+    <div class="dashboard">
 
-    <h1>📂 Evidence Center</h1>
+        <!-- Sidebar -->
 
-    <!-- Tabs -->
+        <aside class="sidebar">
 
-    <div class="tabs">
+            <div class="logo">
 
-        <button
-            id="photosBtn"
-            class="tab-btn"
-            onclick="showPhotos()">
+                <i class="fa-solid fa-shield-halved"></i>
 
-            📸 Photo Evidence
+                <h2>
 
-        </button>
+                    SecureWatch
 
-        <button
-            id="videosBtn"
-            class="tab-btn"
-            onclick="showVideos()">
+                </h2>
 
-            🎥 Video Evidence
+            </div>
 
-        </button>
+            <nav>
 
-        <button
-            id="audioBtn"
-            class="tab-btn"
-            onclick="showAudio()">
+                <a href="/">
 
-            🎤 Audio Evidence
+                    🏠 Dashboard
 
-        </button>
+                </a>
+
+                <a class="active" href="/evidence">
+
+                    📂 Evidence
+
+                </a>
+
+                <a href="/location">
+
+                    📍 Location
+
+                </a>
+
+                <a href="/settings">
+
+                    ⚙ Settings
+
+                </a>
+
+            </nav>
+
+        </aside>
+
+        <!-- Main -->
+
+        <main class="main">
+
+            <div class="page-title">
+
+                <h1>
+
+                    📂 Evidence Center
+
+                </h1>
+
+                <p>
+
+                    Every intrusion is stored as one evidence package.
+
+                </p>
+
+            </div>
+
+            <div id="eventContainer" class="event-grid">
+
+            </div>
+
+        </main>
 
     </div>
 
-    <!-- Gallery -->
-
-    <div
-        id="gallery"
-        class="gallery-grid">
-
-    </div>
-
-</div>
-
-<!-- Fullscreen Modal -->
-
-<div
-    id="imageModal"
-    class="modal">
-
-    <span
-        class="close"
-        onclick="closeModal()">
-
-        &times;
-
-    </span>
-
-    <img
-        id="modalImage"
-        class="modal-content">
-
-</div>
-
-<script src="evidence.js"></script>
+    <script src="evidence.js"></script>
 
 </body>
 
